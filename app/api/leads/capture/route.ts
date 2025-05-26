@@ -1,0 +1,60 @@
+import { type NextRequest, NextResponse } from "next/server"
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { name, email, phone, course, location, budget, timeline, source, formType } = body
+
+    // Submit to HubSpot
+    const hubspotResponse = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        properties: {
+          firstname: name.split(" ")[0],
+          lastname: name.split(" ").slice(1).join(" "),
+          email: email,
+          phone: phone,
+          course_interest: course,
+          preferred_location: location,
+          budget_range: budget,
+          timeline: timeline,
+          lead_source: source,
+          form_type: formType,
+          lifecyclestage: "lead",
+        },
+      }),
+    })
+
+    // Calculate lead score
+    let leadScore = 0
+    if (email.includes(".edu")) leadScore += 20
+    if (phone) leadScore += 15
+    if (budget === "above-10lakh") leadScore += 25
+    if (timeline === "immediate") leadScore += 30
+    if (course) leadScore += 10
+
+    // Send notification email to admin
+    await fetch("/api/notifications/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "new_lead",
+        data: { name, email, course, leadScore },
+        recipient: process.env.ADMIN_EMAIL,
+      }),
+    })
+
+    return NextResponse.json({
+      success: true,
+      leadScore,
+      message: "Lead captured successfully",
+    })
+  } catch (error) {
+    console.error("Lead capture error:", error)
+    return NextResponse.json({ success: false, error: "Failed to capture lead" }, { status: 500 })
+  }
+}
