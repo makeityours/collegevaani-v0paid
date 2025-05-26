@@ -5,6 +5,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { name, email, phone, course, location, budget, timeline, source, formType } = body
 
+    if (!process.env.HUBSPOT_API_KEY) {
+      console.error("HubSpot API key is missing in environment variables.")
+      return NextResponse.json({ success: false, error: "HubSpot API key is missing" }, { status: 500 })
+    }
+
     // Submit to HubSpot
     const hubspotResponse = await fetch("https://api.hubapi.com/crm/v3/objects/contacts", {
       method: "POST",
@@ -29,6 +34,15 @@ export async function POST(request: NextRequest) {
       }),
     })
 
+    if (!hubspotResponse.ok) {
+      const errorData = await hubspotResponse.json()
+      console.error("HubSpot API error:", errorData)
+      return NextResponse.json(
+        { success: false, error: "Failed to submit lead to HubSpot", hubspotError: errorData },
+        { status: 500 },
+      )
+    }
+
     // Calculate lead score
     let leadScore = 0
     if (email.includes(".edu")) leadScore += 20
@@ -37,16 +51,28 @@ export async function POST(request: NextRequest) {
     if (timeline === "immediate") leadScore += 30
     if (course) leadScore += 10
 
-    // Send notification email to admin
-    await fetch("/api/notifications/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "new_lead",
-        data: { name, email, course, leadScore },
-        recipient: process.env.ADMIN_EMAIL,
-      }),
-    })
+    if (!process.env.ADMIN_EMAIL) {
+      console.warn("ADMIN_EMAIL is not set. Skipping notification email.")
+    } else {
+      // Send notification email to admin
+      try {
+        const notificationResponse = await fetch("/api/notifications/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            type: "new_lead",
+            data: { name, email, course, leadScore },
+            recipient: process.env.ADMIN_EMAIL,
+          }),
+        })
+
+        if (!notificationResponse.ok) {
+          console.error("Failed to send notification email:", notificationResponse.statusText)
+        }
+      } catch (notificationError) {
+        console.error("Error sending notification email:", notificationError)
+      }
+    }
 
     return NextResponse.json({
       success: true,

@@ -30,8 +30,11 @@ const footerLinks = [
       { label: "College Predictor", href: "/resources/college-predictor" },
       { label: "Career Guidance", href: "/resources/career-guidance" },
       { label: "Scholarships", href: "/resources/scholarships" },
-      { label: "Study Abroad", href: "/resources/study-abroad" },
+      { label: "Study Abroad", href: "/study-abroad" },
       { label: "Entrance Exams", href: "/exams" },
+      { label: "Student Community", href: "/engagement" },
+      { label: "Get Counseling", href: "/lead-generation" },
+      { label: "Study Resources", href: "/resources" },
     ],
   },
   {
@@ -42,6 +45,7 @@ const footerLinks = [
       { label: "Careers", href: "/careers" },
       { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Terms of Use", href: "/terms" },
+      { label: "Admin Portal", href: "/admin" },
     ],
   },
 ]

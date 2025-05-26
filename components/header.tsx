@@ -33,6 +33,11 @@ import {
   BookOpenCheck,
   Laptop,
   X,
+  Bell,
+  Settings,
+  BarChart3,
+  Users,
+  Target,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -42,6 +47,8 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [theme, setTheme] = useState<"light" | "dark">("light")
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userRole, setUserRole] = useState<"student" | "admin" | "counselor" | "parent">("student")
   const pathname = usePathname()
 
   useEffect(() => {
@@ -54,7 +61,32 @@ export default function Header() {
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light")
-    // In a real implementation, you would update the document class and localStorage
+  }
+
+  // Check if user is logged in (this would come from your auth system)
+  useEffect(() => {
+    // Simulate checking auth status
+    const checkAuth = () => {
+      const token = localStorage.getItem("auth_token")
+      setIsLoggedIn(!!token)
+      const role = localStorage.getItem("user_role") as typeof userRole
+      if (role) setUserRole(role)
+    }
+    checkAuth()
+  }, [])
+
+  const getDashboardLink = () => {
+    switch (userRole) {
+      case "admin":
+        return "/admin"
+      case "counselor":
+        return "/dashboard/counselor"
+      case "parent":
+        return "/dashboard/parent"
+      case "student":
+      default:
+        return "/dashboard/student"
+    }
   }
 
   return (
@@ -72,6 +104,7 @@ export default function Header() {
             </div>
             <span className="hidden text-xl font-bold md:inline-block">CollegeVaani</span>
           </Link>
+
           <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -79,13 +112,14 @@ export default function Header() {
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Colleges</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     <li className="row-span-3">
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="flex flex-col justify-end w-full h-full p-6 no-underline rounded-md outline-none select-none bg-gradient-to-b from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/60 focus:shadow-md"
                           href="/colleges"
                         >
@@ -94,12 +128,12 @@ export default function Header() {
                           <p className="text-sm leading-tight text-blue-600/80">
                             Discover top colleges and universities across India
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:bg-blue-50"
                           href="/colleges/engineering"
                         >
@@ -107,12 +141,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Top IITs, NITs and private engineering institutions
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:bg-blue-50"
                           href="/colleges/medical"
                         >
@@ -120,12 +154,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             AIIMS, top government and private medical colleges
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:bg-blue-50"
                           href="/colleges/compare"
                         >
@@ -133,12 +167,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Side-by-side comparison of your shortlisted colleges
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:bg-blue-50"
                           href="/colleges/rankings"
                         >
@@ -146,19 +180,20 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             NIRF and other popular college rankings
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Courses</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-4 md:w-[500px] lg:w-[600px] lg:grid-cols-[.75fr_1fr]">
                     <li className="row-span-3">
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="flex flex-col justify-end w-full h-full p-6 no-underline rounded-md outline-none select-none bg-gradient-to-b from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-900/60 focus:shadow-md"
                           href="/courses"
                         >
@@ -167,12 +202,12 @@ export default function Header() {
                           <p className="text-sm leading-tight text-indigo-600/80">
                             Find the perfect course for your career goals
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-indigo-50 dark:hover:bg-indigo-900/20 focus:bg-indigo-50"
                           href="/courses/engineering"
                         >
@@ -180,12 +215,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             B.Tech, M.Tech and specialized engineering programs
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-indigo-50 dark:hover:bg-indigo-900/20 focus:bg-indigo-50"
                           href="/courses/medical"
                         >
@@ -193,12 +228,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             MBBS, MD, BDS and other medical courses
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-indigo-50 dark:hover:bg-indigo-900/20 focus:bg-indigo-50"
                           href="/courses/management"
                         >
@@ -206,12 +241,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             MBA, BBA, and executive management programs
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-indigo-50 dark:hover:bg-indigo-900/20 focus:bg-indigo-50"
                           href="/online-degrees"
                         >
@@ -222,19 +257,20 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Flexible online degree programs from top universities
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Exams</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid gap-3 p-4 md:w-[500px] lg:w-[600px] lg:grid-cols-[.75fr_1fr]">
                     <li className="row-span-3">
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="flex flex-col justify-end w-full h-full p-6 no-underline rounded-md outline-none select-none bg-gradient-to-b from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-900/60 focus:shadow-md"
                           href="/exams"
                         >
@@ -243,12 +279,12 @@ export default function Header() {
                           <p className="text-sm leading-tight text-purple-600/80">
                             Prepare for entrance exams with our resources
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-purple-50 dark:hover:bg-purple-900/20 focus:bg-purple-50"
                           href="/exams/jee-main"
                         >
@@ -259,12 +295,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Joint Entrance Examination for engineering admissions
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-purple-50 dark:hover:bg-purple-900/20 focus:bg-purple-50"
                           href="/exams/neet"
                         >
@@ -275,12 +311,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             National Eligibility cum Entrance Test for medical
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-purple-50 dark:hover:bg-purple-900/20 focus:bg-purple-50"
                           href="/exams/cat"
                         >
@@ -288,12 +324,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Common Admission Test for MBA admissions
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-purple-50 dark:hover:bg-purple-900/20 focus:bg-purple-50"
                           href="/resources/college-predictor"
                         >
@@ -301,12 +337,13 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Predict colleges based on your exam scores
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
                 <Link href="/online-degrees" legacyBehavior passHref>
                   <NavigationMenuLink
@@ -321,13 +358,14 @@ export default function Header() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-green-50 dark:hover:bg-green-900/20 focus:bg-green-50"
                           href="/resources/college-predictor"
                         >
@@ -335,12 +373,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Predict colleges based on your exam scores
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-green-50 dark:hover:bg-green-900/20 focus:bg-green-50"
                           href="/resources/study-material"
                         >
@@ -348,12 +386,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Free study resources for various exams
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-green-50 dark:hover:bg-green-900/20 focus:bg-green-50"
                           href="/resources/scholarships"
                         >
@@ -361,12 +399,12 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Find scholarships to fund your education
                           </p>
-                        </a>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                     <li>
                       <NavigationMenuLink asChild>
-                        <a
+                        <Link
                           className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-green-50 dark:hover:bg-green-900/20 focus:bg-green-50"
                           href="/resources/career-guidance"
                         >
@@ -374,7 +412,33 @@ export default function Header() {
                           <p className="text-sm leading-snug text-gray-500 line-clamp-2">
                             Expert advice on choosing the right career path
                           </p>
-                        </a>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-green-50 dark:hover:bg-green-900/20 focus:bg-green-50"
+                          href="/engagement"
+                        >
+                          <div className="text-sm font-medium leading-none">Student Community</div>
+                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                            Join quizzes, forums, and interactive sessions
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="block p-3 space-y-1 no-underline transition-colors rounded-md outline-none select-none hover:bg-green-50 dark:hover:bg-green-900/20 focus:bg-green-50"
+                          href="/lead-generation"
+                        >
+                          <div className="text-sm font-medium leading-none">Get Counseling</div>
+                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                            Free personalized education counseling
+                          </p>
+                        </Link>
                       </NavigationMenuLink>
                     </li>
                   </ul>
@@ -383,6 +447,7 @@ export default function Header() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
+
         <div className="flex items-center gap-4">
           <div className={cn("relative transition-all duration-300 lg:w-auto", isSearchOpen ? "w-full" : "w-10")}>
             <div
@@ -411,38 +476,96 @@ export default function Header() {
               <span className="sr-only">Toggle search</span>
             </Button>
           </div>
+
           <Button variant="ghost" size="icon" onClick={toggleTheme} className="hidden lg:flex">
             {theme === "light" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             <span className="sr-only">Toggle theme</span>
           </Button>
-          <div className="hidden lg:flex">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative flex items-center gap-2">
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src="/placeholder.svg" alt="User" />
-                    <AvatarFallback>U</AvatarFallback>
-                  </Avatar>
-                  <span>Account</span>
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <Link href="/auth/login">
-                  <DropdownMenuItem>
-                    <User className="w-4 h-4 mr-2" />
-                    <span>Login</span>
+
+          {isLoggedIn ? (
+            <div className="hidden lg:flex items-center gap-2">
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="w-5 h-5" />
+                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">
+                  3
+                </Badge>
+              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative flex items-center gap-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src="/placeholder.svg" alt="User" />
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                    <span className="hidden md:inline">Account</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem asChild>
+                    <Link href={getDashboardLink()}>
+                      <BarChart3 className="w-4 h-4 mr-2" />
+                      <span>Dashboard</span>
+                    </Link>
                   </DropdownMenuItem>
-                </Link>
-                <Link href="/auth/register">
-                  <DropdownMenuItem>
-                    <User className="w-4 h-4 mr-2" />
-                    <span>Register</span>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/student/profile">
+                      <User className="w-4 h-4 mr-2" />
+                      <span>Profile</span>
+                    </Link>
                   </DropdownMenuItem>
-                </Link>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings">
+                      <Settings className="w-4 h-4 mr-2" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  {userRole === "admin" && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/comprehensive-dashboard">
+                        <Target className="w-4 h-4 mr-2" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem>
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="hidden lg:flex">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative flex items-center gap-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src="/placeholder.svg" alt="User" />
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                    <span>Account</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem asChild>
+                    <Link href="/auth/login">
+                      <User className="w-4 h-4 mr-2" />
+                      <span>Login</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/auth/register">
+                      <Users className="w-4 h-4 mr-2" />
+                      <span>Register</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
+
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden">
@@ -515,6 +638,20 @@ export default function Header() {
                         <Globe className="w-5 h-5 text-gray-500" />
                         <span>Resources</span>
                       </Link>
+                      <Link
+                        href="/engagement"
+                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        <Users className="w-5 h-5 text-gray-500" />
+                        <span>Community</span>
+                      </Link>
+                      <Link
+                        href="/lead-generation"
+                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        <Target className="w-5 h-5 text-gray-500" />
+                        <span>Get Counseling</span>
+                      </Link>
                     </div>
                   </div>
                   <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
@@ -535,18 +672,40 @@ export default function Header() {
                   </div>
                 </div>
                 <div className="space-y-4" data-value="account">
-                  <div className="space-y-1">
-                    <Link
-                      href="/auth/login"
-                      className="flex items-center w-full gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      <User className="w-5 h-5 text-gray-500" />
-                      <span>Login</span>
-                    </Link>
-                    <Link href="/auth/register">
-                      <Button className="w-full">Register</Button>
-                    </Link>
-                  </div>
+                  {isLoggedIn ? (
+                    <div className="space-y-1">
+                      <Link
+                        href={getDashboardLink()}
+                        className="flex items-center w-full gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        <BarChart3 className="w-5 h-5 text-gray-500" />
+                        <span>Dashboard</span>
+                      </Link>
+                      <Link
+                        href="/dashboard/student/profile"
+                        className="flex items-center w-full gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        <User className="w-5 h-5 text-gray-500" />
+                        <span>Profile</span>
+                      </Link>
+                      <Button variant="ghost" className="w-full justify-start">
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <Link
+                        href="/auth/login"
+                        className="flex items-center w-full gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        <User className="w-5 h-5 text-gray-500" />
+                        <span>Login</span>
+                      </Link>
+                      <Link href="/auth/register">
+                        <Button className="w-full">Register</Button>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </Tabs>
             </SheetContent>

@@ -1,5 +1,6 @@
 import Image from "next/image"
-import { ArrowRight, BookOpen, Building, GraduationCap, Users } from "lucide-react"
+import { ArrowRight, BookOpen, GraduationCap, Users, Target } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +9,7 @@ import FeaturedColleges from "@/components/featured-colleges"
 import PopularCourses from "@/components/popular-courses"
 import ExamCalendar from "@/components/exam-calendar"
 import Testimonials from "@/components/testimonials"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function Home() {
   return (
@@ -55,7 +57,7 @@ export default function Home() {
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="h-8 w-8 rounded-full border-2 border-background bg-muted overflow-hidden">
                       <Image
-                        src={`/placeholder.svg?height=32&width=32&text=${i}`}
+                        src={`/placeholder-icon.png?height=32&width=32&text=${i}`}
                         alt={`User ${i}`}
                         width={32}
                         height={32}
@@ -137,38 +139,41 @@ export default function Home() {
           </div>
 
           <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
-            {[
-              {
-                icon: Building,
-                title: "College Finder",
-                description:
-                  "Search and filter through thousands of colleges based on location, courses, fees, and rankings.",
-              },
-              {
-                icon: BookOpen,
-                title: "Course Guidance",
-                description:
-                  "Explore detailed information about various courses, eligibility criteria, and career prospects.",
-              },
-              {
-                icon: Users,
-                title: "Community Support",
-                description:
-                  "Connect with current students and alumni to get authentic reviews and insights about colleges.",
-              },
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center space-y-4 text-center group animate-in fade-in-50 duration-1000"
-                style={{ animationDelay: `${index * 200}ms` }}
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
-                  <feature.icon className="h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-bold">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
+            <Link href="/engagement" className="group">
+              <Card className="h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardContent className="p-6 text-center">
+                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Interactive Community</h3>
+                  <p className="text-muted-foreground">Join quizzes, forums, and live sessions with fellow students</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/lead-generation" className="group">
+              <Card className="h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardContent className="p-6 text-center">
+                  <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                    <Target className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Expert Counseling</h3>
+                  <p className="text-muted-foreground">Get personalized guidance from education experts</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/resources" className="group">
+              <Card className="h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardContent className="p-6 text-center">
+                  <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
+                    <BookOpen className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Study Resources</h3>
+                  <p className="text-muted-foreground">Access comprehensive study materials and tools</p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
       </section>
@@ -280,6 +285,61 @@ export default function Home() {
         </div>
       </section>
 
+      {/* New Features Showcase */}
+      <section className="w-full py-12 md:py-24 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
+            <Badge variant="outline" className="mb-2 bg-primary/10 text-primary border-primary/20">
+              New Features
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              Enhanced Learning Experience
+            </h2>
+            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
+              Discover our new interactive features designed to enhance your educational journey
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <Link href="/engagement" className="group">
+              <Card className="h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardContent className="p-6 text-center">
+                  <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Interactive Community</h3>
+                  <p className="text-muted-foreground">Join quizzes, forums, and live sessions with fellow students</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/lead-generation" className="group">
+              <Card className="h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardContent className="p-6 text-center">
+                  <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                    <Target className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Expert Counseling</h3>
+                  <p className="text-muted-foreground">Get personalized guidance from education experts</p>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/resources" className="group">
+              <Card className="h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CardContent className="p-6 text-center">
+                  <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
+                    <BookOpen className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Study Resources</h3>
+                  <p className="text-muted-foreground">Access comprehensive study materials and tools</p>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="w-full py-12 md:py-24 bg-primary text-primary-foreground">
         <div className="container px-4 md:px-6">
@@ -293,15 +353,16 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in-50 duration-1000">
-              <Button variant="secondary" size="lg">
-                Explore Colleges
+              <Button variant="secondary" size="lg" asChild>
+                <Link href="/colleges">Explore Colleges</Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+                asChild
               >
-                Get Expert Guidance
+                <Link href="/lead-generation">Get Expert Guidance</Link>
               </Button>
             </div>
           </div>
