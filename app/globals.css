@@ -5,47 +5,57 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.75rem;
+    --chart-1: 262.1 83.3% 57.8%;
+    --chart-2: 252.5 95% 85.9%;
+    --chart-3: 262.1 83.3% 57.8%;
+    --chart-4: 252.5 95% 85.9%;
+    --chart-5: 262.1 83.3% 57.8%;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 263.4 70% 50.4%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 70% 50.4%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
@@ -59,47 +69,105 @@
   }
 }
 
-/* Mobile responsiveness improvements */
+/* Enhanced Responsive Design */
 @media (max-width: 640px) {
   .container {
-    @apply px-4;
+    @apply px-3;
   }
 
   h1 {
-    @apply text-2xl;
+    @apply text-2xl leading-tight;
   }
 
   h2 {
-    @apply text-xl;
+    @apply text-xl leading-tight;
   }
 
   .card-grid {
-    @apply grid-cols-1;
+    @apply grid-cols-1 gap-4;
+  }
+
+  .responsive-padding {
+    @apply p-4;
+  }
+
+  .responsive-text {
+    @apply text-sm;
   }
 }
 
-/* Custom animations */
+@media (min-width: 641px) and (max-width: 768px) {
+  .card-grid {
+    @apply grid-cols-2 gap-4;
+  }
+
+  .responsive-padding {
+    @apply p-6;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .card-grid {
+    @apply grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .responsive-padding {
+    @apply p-8;
+  }
+}
+
+@media (min-width: 1025px) {
+  .card-grid {
+    @apply grid-cols-3 xl:grid-cols-4 gap-8;
+  }
+
+  .responsive-padding {
+    @apply p-10;
+  }
+}
+
+/* Custom Indigo Gradients */
+.gradient-indigo {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-indigo-light {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.gradient-indigo-dark {
+  background: linear-gradient(135deg, #4c63d2 0%, #5a67d8 100%);
+}
+
+/* Enhanced Animations */
 @keyframes float {
-  0% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
     transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
   }
 }
 
-@keyframes float-delay {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+@keyframes pulse-indigo {
+  0%,
   100% {
-    transform: translateY(0px);
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
+}
+
+@keyframes slide-in-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
@@ -107,21 +175,28 @@
   animation: float 6s ease-in-out infinite;
 }
 
-.animate-float-delay {
-  animation: float-delay 6s ease-in-out 2s infinite;
+.animate-pulse-indigo {
+  animation: pulse-indigo 2s infinite;
 }
 
-/* Responsive tables for mobile */
-@media (max-width: 768px) {
-  .responsive-table {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+.animate-slide-in-bottom {
+  animation: slide-in-bottom 0.5s ease-out;
 }
 
-/* Improved scrollbars */
+/* Ad Placement Styles */
+.ad-banner {
+  @apply bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-lg p-4 my-6;
+}
+
+.ad-sidebar {
+  @apply bg-white border border-indigo-100 rounded-lg p-4 shadow-sm;
+}
+
+.ad-inline {
+  @apply bg-indigo-50 border-l-4 border-indigo-500 p-4 my-4 rounded-r-lg;
+}
+
+/* Enhanced Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -133,40 +208,61 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
+  background: linear-gradient(135deg, #667eea, #764ba2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: linear-gradient(135deg, #5a67d8, #6b46c1);
 }
 
+/* Responsive Grid Utilities */
 @layer utilities {
-  @media (min-width: 475px) {
-    .xs\:flex-row {
-      flex-direction: row;
-    }
-    .xs\:w-auto {
-      width: auto;
-    }
-    .xs\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .xs\:self-auto {
-      align-self: auto;
-    }
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6;
+  }
+
+  .flex-responsive {
+    @apply flex flex-col sm:flex-row gap-4;
+  }
+
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .padding-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+
+  .margin-responsive {
+    @apply m-4 sm:m-6 lg:m-8;
   }
 }
 
-@media (min-width: 400px) {
-  .xs\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
   }
 }
 
-/* Add a grid pattern background */
-.bg-grid-pattern {
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --primary: 262.1 100% 50%;
+    --border: 220 13% 80%;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

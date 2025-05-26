@@ -6,227 +6,309 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "@/hooks/use-toast"
-import { Plus, Edit, Trash2, Eye, BarChart3, Target, DollarSign, MousePointer, Building } from "lucide-react"
+import { Plus, Edit, Trash2, Eye, EyeOff, BarChart3, Settings, Target, TrendingUp, DollarSign } from "lucide-react"
 
-export default function AdsManagementPage() {
-  const [activeTab, setActiveTab] = useState("campaigns")
+interface AdCampaign {
+  id: string
+  title: string
+  description: string
+  type: "banner" | "sidebar" | "inline" | "popup"
+  placement: string
+  ctaText: string
+  ctaLink: string
+  imageUrl?: string
+  isActive: boolean
+  impressions: number
+  clicks: number
+  revenue: number
+  startDate: string
+  endDate: string
+}
 
-  const [campaigns, setCampaigns] = useState([
+export default function AdsManagement() {
+  const [campaigns, setCampaigns] = useState<AdCampaign[]>([
     {
-      id: 1,
-      name: "Engineering Colleges Promotion",
-      type: "Banner",
-      status: "Active",
-      budget: 50000,
-      spent: 32000,
-      impressions: 125000,
-      clicks: 2500,
-      conversions: 45,
+      id: "1",
+      title: "Premium College Guide",
+      description: "Get exclusive insights into top colleges",
+      type: "sidebar",
+      placement: "homepage-sidebar",
+      ctaText: "Download Free",
+      ctaLink: "/marketplace",
+      imageUrl: "/placeholder.svg?height=200&width=300&text=College+Guide",
+      isActive: true,
+      impressions: 15420,
+      clicks: 892,
+      revenue: 2340,
       startDate: "2024-01-01",
-      endDate: "2024-02-01",
-      targetAudience: "Engineering Students",
+      endDate: "2024-12-31",
     },
     {
-      id: 2,
-      name: "Medical College Awareness",
-      type: "Native",
-      status: "Paused",
-      budget: 30000,
-      spent: 18000,
-      impressions: 89000,
-      clicks: 1800,
-      conversions: 28,
-      startDate: "2024-01-15",
-      endDate: "2024-02-15",
-      targetAudience: "Medical Students",
+      id: "2",
+      title: "Boost Your Applications",
+      description: "Expert guidance from certified counselors",
+      type: "banner",
+      placement: "homepage-top",
+      ctaText: "Book Session",
+      ctaLink: "/lead-generation",
+      isActive: true,
+      impressions: 28750,
+      clicks: 1456,
+      revenue: 4580,
+      startDate: "2024-01-01",
+      endDate: "2024-12-31",
     },
   ])
 
-  const adPlacements = [
-    { id: 1, name: "Homepage Hero Banner", size: "1200x400", price: "₹500/day", status: "Available" },
-    { id: 2, name: "College Listing Sidebar", size: "300x600", price: "₹300/day", status: "Occupied" },
-    { id: 3, name: "Course Page Header", size: "728x90", price: "₹200/day", status: "Available" },
-    { id: 4, name: "Search Results Top", size: "320x100", price: "₹150/day", status: "Available" },
-    { id: 5, name: "Footer Banner", size: "970x250", price: "₹100/day", status: "Occupied" },
-  ]
+  const [adSettings, setAdSettings] = useState({
+    bannerAds: { enabled: true, frequency: 3 },
+    sidebarAds: { enabled: true, frequency: 1 },
+    inlineAds: { enabled: true, frequency: 5 },
+    popupAds: { enabled: false, frequency: 1 },
+  })
 
-  const advertisers = [
-    {
-      id: 1,
-      name: "IIT Delhi",
-      email: "marketing@iitd.ac.in",
-      totalSpent: 125000,
-      activeCampaigns: 3,
-      status: "Premium",
-      joinDate: "2023-06-15",
-    },
-    {
-      id: 2,
-      name: "BITS Pilani",
-      email: "admissions@bits-pilani.ac.in",
-      totalSpent: 89000,
-      activeCampaigns: 2,
-      status: "Standard",
-      joinDate: "2023-08-20",
-    },
-  ]
+  const [newCampaign, setNewCampaign] = useState({
+    title: "",
+    description: "",
+    type: "banner" as const,
+    placement: "",
+    ctaText: "",
+    ctaLink: "",
+    imageUrl: "",
+    startDate: "",
+    endDate: "",
+  })
 
-  const handleCreateCampaign = () => {
-    toast({
-      title: "Campaign Created",
-      description: "New advertising campaign has been created successfully.",
-    })
+  const handleCreateCampaign = async () => {
+    try {
+      const response = await fetch("/api/admin/ads/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newCampaign),
+      })
+
+      if (response.ok) {
+        const campaign = await response.json()
+        setCampaigns([
+          ...campaigns,
+          { ...campaign, id: Date.now().toString(), isActive: true, impressions: 0, clicks: 0, revenue: 0 },
+        ])
+        setNewCampaign({
+          title: "",
+          description: "",
+          type: "banner",
+          placement: "",
+          ctaText: "",
+          ctaLink: "",
+          imageUrl: "",
+          startDate: "",
+          endDate: "",
+        })
+        toast({
+          title: "Campaign Created",
+          description: "New ad campaign has been created successfully.",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create campaign.",
+        variant: "destructive",
+      })
+    }
   }
 
-  const handlePauseCampaign = (id: number) => {
+  const toggleCampaign = async (id: string) => {
     setCampaigns(
-      campaigns.map((campaign) =>
-        campaign.id === id ? { ...campaign, status: campaign.status === "Active" ? "Paused" : "Active" } : campaign,
-      ),
+      campaigns.map((campaign) => (campaign.id === id ? { ...campaign, isActive: !campaign.isActive } : campaign)),
     )
+  }
+
+  const deleteCampaign = async (id: string) => {
+    setCampaigns(campaigns.filter((campaign) => campaign.id !== id))
     toast({
-      title: "Campaign Updated",
-      description: "Campaign status has been updated.",
+      title: "Campaign Deleted",
+      description: "Ad campaign has been removed.",
     })
   }
+
+  const updateAdSettings = async () => {
+    try {
+      const response = await fetch("/api/admin/ads/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(adSettings),
+      })
+
+      if (response.ok) {
+        toast({
+          title: "Settings Updated",
+          description: "Ad settings have been saved successfully.",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update settings.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const totalImpressions = campaigns.reduce((sum, campaign) => sum + campaign.impressions, 0)
+  const totalClicks = campaigns.reduce((sum, campaign) => sum + campaign.clicks, 0)
+  const totalRevenue = campaigns.reduce((sum, campaign) => sum + campaign.revenue, 0)
+  const averageCTR = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(2) : "0.00"
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Ads Management</h1>
-          <p className="text-muted-foreground">Manage advertising campaigns and revenue</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Ads Management
+          </h1>
+          <p className="text-gray-600">Manage advertising campaigns and placements</p>
         </div>
-        <Button onClick={handleCreateCampaign}>
+        <Button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
           <Plus className="h-4 w-4 mr-2" />
-          Create Campaign
+          New Campaign
         </Button>
       </div>
 
-      {/* Revenue Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Revenue</p>
-                <p className="text-2xl font-bold">₹2.4L</p>
-              </div>
-              <DollarSign className="h-8 w-8 text-green-500" />
+      {/* Analytics Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card className="border-indigo-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-600">Total Impressions</span>
+              <Eye className="h-4 w-4 text-indigo-500" />
             </div>
+            <div className="text-2xl font-bold text-gray-900">{totalImpressions.toLocaleString()}</div>
+            <div className="text-xs text-green-600 mt-1">+12.5% from last month</div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Active Campaigns</p>
-                <p className="text-2xl font-bold">12</p>
-              </div>
-              <Target className="h-8 w-8 text-blue-500" />
+        <Card className="border-indigo-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-600">Total Clicks</span>
+              <Target className="h-4 w-4 text-purple-500" />
             </div>
+            <div className="text-2xl font-bold text-gray-900">{totalClicks.toLocaleString()}</div>
+            <div className="text-xs text-green-600 mt-1">+8.3% from last month</div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Total Impressions</p>
-                <p className="text-2xl font-bold">1.2M</p>
-              </div>
-              <Eye className="h-8 w-8 text-purple-500" />
+        <Card className="border-indigo-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-600">Click-Through Rate</span>
+              <TrendingUp className="h-4 w-4 text-green-500" />
             </div>
+            <div className="text-2xl font-bold text-gray-900">{averageCTR}%</div>
+            <div className="text-xs text-green-600 mt-1">+2.1% from last month</div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Click Rate</p>
-                <p className="text-2xl font-bold">2.8%</p>
-              </div>
-              <MousePointer className="h-8 w-8 text-orange-500" />
+        <Card className="border-indigo-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-600">Revenue</span>
+              <DollarSign className="h-4 w-4 text-yellow-500" />
             </div>
+            <div className="text-2xl font-bold text-gray-900">₹{totalRevenue.toLocaleString()}</div>
+            <div className="text-xs text-green-600 mt-1">+15.7% from last month</div>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+      <Tabs defaultValue="campaigns" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-          <TabsTrigger value="placements">Ad Placements</TabsTrigger>
-          <TabsTrigger value="advertisers">Advertisers</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="create">Create Campaign</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="campaigns" className="space-y-4">
-          <Card>
+        <TabsContent value="campaigns" className="space-y-6">
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>Active Campaigns</CardTitle>
-              <CardDescription>Manage all advertising campaigns</CardDescription>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-indigo-600" />
+                Active Campaigns
+              </CardTitle>
+              <CardDescription>Manage your advertising campaigns</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {campaigns.map((campaign) => (
-                  <div key={campaign.id} className="border rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="font-semibold text-lg">{campaign.name}</h3>
-                        <p className="text-sm text-muted-foreground">{campaign.targetAudience}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={campaign.status === "Active" ? "default" : "secondary"}>
-                          {campaign.status}
-                        </Badge>
-                        <Badge variant="outline">{campaign.type}</Badge>
-                      </div>
-                    </div>
+                  <div
+                    key={campaign.id}
+                    className="border border-indigo-100 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-semibold text-gray-900">{campaign.title}</h3>
+                          <Badge
+                            variant={campaign.isActive ? "default" : "secondary"}
+                            className={campaign.isActive ? "bg-green-500" : ""}
+                          >
+                            {campaign.isActive ? "Active" : "Paused"}
+                          </Badge>
+                          <Badge variant="outline" className="border-indigo-200 text-indigo-700">
+                            {campaign.type}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-3">{campaign.description}</p>
 
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Budget</p>
-                        <p className="font-medium">₹{campaign.budget.toLocaleString()}</p>
+                        <div className="grid grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-500">Impressions:</span>
+                            <div className="font-medium">{campaign.impressions.toLocaleString()}</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">Clicks:</span>
+                            <div className="font-medium">{campaign.clicks.toLocaleString()}</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">CTR:</span>
+                            <div className="font-medium">
+                              {campaign.impressions > 0
+                                ? ((campaign.clicks / campaign.impressions) * 100).toFixed(2)
+                                : "0.00"}
+                              %
+                            </div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500">Revenue:</span>
+                            <div className="font-medium text-green-600">₹{campaign.revenue.toLocaleString()}</div>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Spent</p>
-                        <p className="font-medium">₹{campaign.spent.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Impressions</p>
-                        <p className="font-medium">{campaign.impressions.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Clicks</p>
-                        <p className="font-medium">{campaign.clicks.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Conversions</p>
-                        <p className="font-medium">{campaign.conversions}</p>
-                      </div>
-                    </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-muted-foreground">
-                        {campaign.startDate} - {campaign.endDate}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Eye className="h-4 w-4" />
+                      <div className="flex items-center gap-2 ml-4">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => toggleCampaign(campaign.id)}
+                          className="hover:bg-indigo-50"
+                        >
+                          {campaign.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="ghost" size="icon" className="hover:bg-indigo-50">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => handlePauseCampaign(campaign.id)}>
-                          {campaign.status === "Active" ? "Pause" : "Resume"}
-                        </Button>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteCampaign(campaign.id)}
+                          className="hover:bg-red-50 text-red-600"
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -238,211 +320,185 @@ export default function AdsManagementPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="placements" className="space-y-4">
-          <Card>
+        <TabsContent value="create" className="space-y-6">
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>Ad Placement Inventory</CardTitle>
-              <CardDescription>Manage available advertising spaces on the platform</CardDescription>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="h-5 w-5 text-indigo-600" />
+                Create New Campaign
+              </CardTitle>
+              <CardDescription>Set up a new advertising campaign</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {adPlacements.map((placement) => (
-                  <Card key={placement.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="font-medium">{placement.name}</h3>
-                        <Badge variant={placement.status === "Available" ? "default" : "secondary"}>
-                          {placement.status}
-                        </Badge>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Size:</span>
-                          <span>{placement.size}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Price:</span>
-                          <span className="font-medium">{placement.price}</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 mt-4">
-                        <Button size="sm" className="flex-1">
-                          {placement.status === "Available" ? "Book Now" : "View Details"}
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Campaign Title</Label>
+                  <Input
+                    id="title"
+                    value={newCampaign.title}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, title: e.target.value })}
+                    placeholder="Enter campaign title"
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
+                </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Create New Placement</CardTitle>
-              <CardDescription>Add a new advertising space</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="placement-name">Placement Name</Label>
-                  <Input id="placement-name" placeholder="e.g., Homepage Banner" />
-                </div>
-                <div>
-                  <Label htmlFor="placement-size">Size</Label>
-                  <Input id="placement-size" placeholder="e.g., 1200x400" />
-                </div>
-                <div>
-                  <Label htmlFor="placement-price">Price per Day</Label>
-                  <Input id="placement-price" placeholder="e.g., ₹500" />
-                </div>
-                <div>
-                  <Label htmlFor="placement-location">Page Location</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select page" />
+                <div className="space-y-2">
+                  <Label htmlFor="type">Ad Type</Label>
+                  <Select
+                    value={newCampaign.type}
+                    onValueChange={(value: any) => setNewCampaign({ ...newCampaign, type: value })}
+                  >
+                    <SelectTrigger className="border-indigo-200 focus:border-indigo-500">
+                      <SelectValue placeholder="Select ad type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="homepage">Homepage</SelectItem>
-                      <SelectItem value="colleges">College Listing</SelectItem>
-                      <SelectItem value="courses">Course Pages</SelectItem>
-                      <SelectItem value="search">Search Results</SelectItem>
+                      <SelectItem value="banner">Banner Ad</SelectItem>
+                      <SelectItem value="sidebar">Sidebar Ad</SelectItem>
+                      <SelectItem value="inline">Inline Ad</SelectItem>
+                      <SelectItem value="popup">Popup Ad</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              <div className="mt-4">
-                <Label htmlFor="placement-description">Description</Label>
-                <Textarea id="placement-description" placeholder="Describe the placement location and visibility" />
+
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={newCampaign.description}
+                  onChange={(e) => setNewCampaign({ ...newCampaign, description: e.target.value })}
+                  placeholder="Enter campaign description"
+                  className="border-indigo-200 focus:border-indigo-500"
+                  rows={3}
+                />
               </div>
-              <Button className="mt-4">Create Placement</Button>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="ctaText">CTA Text</Label>
+                  <Input
+                    id="ctaText"
+                    value={newCampaign.ctaText}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, ctaText: e.target.value })}
+                    placeholder="e.g., Learn More"
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="ctaLink">CTA Link</Label>
+                  <Input
+                    id="ctaLink"
+                    value={newCampaign.ctaLink}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, ctaLink: e.target.value })}
+                    placeholder="/target-page"
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="imageUrl">Image URL (Optional)</Label>
+                <Input
+                  id="imageUrl"
+                  value={newCampaign.imageUrl}
+                  onChange={(e) => setNewCampaign({ ...newCampaign, imageUrl: e.target.value })}
+                  placeholder="https://example.com/image.jpg"
+                  className="border-indigo-200 focus:border-indigo-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="startDate">Start Date</Label>
+                  <Input
+                    id="startDate"
+                    type="date"
+                    value={newCampaign.startDate}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, startDate: e.target.value })}
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="endDate">End Date</Label>
+                  <Input
+                    id="endDate"
+                    type="date"
+                    value={newCampaign.endDate}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, endDate: e.target.value })}
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
+                </div>
+              </div>
+
+              <Button
+                onClick={handleCreateCampaign}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+              >
+                Create Campaign
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="advertisers" className="space-y-4">
-          <Card>
+        <TabsContent value="settings" className="space-y-6">
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>Advertiser Accounts</CardTitle>
-              <CardDescription>Manage advertiser relationships and accounts</CardDescription>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5 text-indigo-600" />
+                Ad Settings
+              </CardTitle>
+              <CardDescription>Configure global advertising settings</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {advertisers.map((advertiser) => (
-                  <div key={advertiser.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Building className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{advertiser.name}</h3>
-                        <p className="text-sm text-muted-foreground">{advertiser.email}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Member since {new Date(advertiser.joinDate).toLocaleDateString()}
-                        </p>
-                      </div>
+            <CardContent className="space-y-6">
+              {Object.entries(adSettings).map(([key, setting]) => (
+                <div key={key} className="flex items-center justify-between p-4 border border-indigo-100 rounded-lg">
+                  <div>
+                    <h3 className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</h3>
+                    <p className="text-sm text-gray-600">
+                      {setting.enabled ? "Enabled" : "Disabled"} • Frequency: Every {setting.frequency} pages
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor={`${key}-frequency`} className="text-sm">
+                        Frequency:
+                      </Label>
+                      <Input
+                        id={`${key}-frequency`}
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={setting.frequency}
+                        onChange={(e) =>
+                          setAdSettings({
+                            ...adSettings,
+                            [key]: { ...setting, frequency: Number.parseInt(e.target.value) || 1 },
+                          })
+                        }
+                        className="w-16 h-8 border-indigo-200"
+                      />
                     </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-4 mb-2">
-                        <div className="text-center">
-                          <p className="text-sm font-medium">₹{advertiser.totalSpent.toLocaleString()}</p>
-                          <p className="text-xs text-muted-foreground">Total Spent</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm font-medium">{advertiser.activeCampaigns}</p>
-                          <p className="text-xs text-muted-foreground">Active Campaigns</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={advertiser.status === "Premium" ? "default" : "secondary"}>
-                          {advertiser.status}
-                        </Badge>
-                        <Button variant="outline" size="sm">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="analytics" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Revenue Trends</CardTitle>
-                <CardDescription>Monthly advertising revenue</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[300px] flex items-center justify-center bg-muted/30 rounded-md">
-                  <BarChart3 className="h-8 w-8 text-muted-foreground" />
-                  <span className="ml-2 text-muted-foreground">Revenue chart</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Performance Metrics</CardTitle>
-                <CardDescription>Campaign performance overview</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span>Average CTR</span>
-                    <span className="font-medium">2.8%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Conversion Rate</span>
-                    <span className="font-medium">1.8%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Average CPC</span>
-                    <span className="font-medium">₹12.50</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Revenue per Click</span>
-                    <span className="font-medium">₹22.30</span>
+                    <Switch
+                      checked={setting.enabled}
+                      onCheckedChange={(checked) =>
+                        setAdSettings({
+                          ...adSettings,
+                          [key]: { ...setting, enabled: checked },
+                        })
+                      }
+                    />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              ))}
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Top Performing Placements</CardTitle>
-              <CardDescription>Best performing ad placements by revenue</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {[
-                  { name: "Homepage Hero Banner", revenue: "₹45,000", ctr: "3.2%" },
-                  { name: "College Listing Sidebar", revenue: "₹32,000", ctr: "2.8%" },
-                  { name: "Course Page Header", revenue: "₹28,000", ctr: "2.5%" },
-                  { name: "Search Results Top", revenue: "₹18,000", ctr: "2.1%" },
-                ].map((placement, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">{placement.name}</p>
-                      <p className="text-sm text-muted-foreground">CTR: {placement.ctr}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-medium">{placement.revenue}</p>
-                      <p className="text-sm text-muted-foreground">This month</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Button
+                onClick={updateAdSettings}
+                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+              >
+                Save Settings
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
