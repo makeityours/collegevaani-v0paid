@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import ExamAlertDialog from "@/components/exam-alert-dialog"
+import ExamAlertSystem from "@/components/exam-alert-system"
 
 export default function ExamsPage() {
   return (
@@ -491,6 +492,12 @@ export default function ExamsPage() {
               </Button>
             </CardFooter>
           </Card>
+        </div>
+
+        {/* Exam Alert System */}
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold mb-4">Stay Updated with Exam Alerts</h2>
+          <ExamAlertSystem />
         </div>
 
         {/* Exam Preparation Resources */}

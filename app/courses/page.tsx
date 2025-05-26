@@ -20,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Checkbox } from "@/components/ui/checkbox"
+import CourseComparisonTool from "@/components/course-comparison-tool"
 
 export default function CoursesPage() {
   return (
@@ -428,6 +429,12 @@ export default function CoursesPage() {
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
               </div>
+            </div>
+
+            {/* Course Comparison Tool */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold mb-4">Compare Courses</h2>
+              <CourseComparisonTool />
             </div>
 
             {/* All Courses */}

@@ -324,6 +324,8 @@ export default function ExamDetailPage({ params }: { params: { slug: string } })
               <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
               <TabsTrigger value="pattern">Exam Pattern</TabsTrigger>
               <TabsTrigger value="syllabus">Syllabus</TabsTrigger>
+              <TabsTrigger value="preparation">Preparation</TabsTrigger>
+              <TabsTrigger value="practice">Practice Tests</TabsTrigger>
               <TabsTrigger value="colleges">Top Colleges</TabsTrigger>
               <TabsTrigger value="faqs">FAQs</TabsTrigger>
             </TabsList>
@@ -681,6 +683,183 @@ export default function ExamDetailPage({ params }: { params: { slug: string } })
                       <Download className="mr-2 h-4 w-4" />
                       Download Complete Syllabus
                     </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="preparation" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Exam Preparation Resources</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Tabs defaultValue="study-plan" className="w-full">
+                    <TabsList className="w-full justify-start overflow-x-auto mb-4">
+                      <TabsTrigger value="study-plan">Study Plan</TabsTrigger>
+                      <TabsTrigger value="books">Recommended Books</TabsTrigger>
+                      <TabsTrigger value="tips">Preparation Tips</TabsTrigger>
+                      <TabsTrigger value="previous-papers">Previous Papers</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="study-plan" className="mt-0">
+                      <div className="space-y-4">
+                        <h3 className="font-semibold text-lg">6-Month Study Plan for JEE Main 2024</h3>
+                        <div className="grid gap-4">
+                          {[
+                            {
+                              month: "Month 1-2: Foundation Building",
+                              topics: [
+                                "Complete NCERT Physics, Chemistry, Mathematics",
+                                "Basic concept clarity",
+                                "Formula memorization",
+                              ],
+                              target: "Complete syllabus overview and identify weak areas",
+                            },
+                            {
+                              month: "Month 3-4: Intensive Practice",
+                              topics: [
+                                "Topic-wise practice questions",
+                                "Previous year questions",
+                                "Time management practice",
+                              ],
+                              target: "Solve 50+ questions daily across all subjects",
+                            },
+                            {
+                              month: "Month 5-6: Mock Tests & Revision",
+                              topics: ["Full-length mock tests", "Revision of important formulas", "Error analysis"],
+                              target: "Attempt 3 mock tests per week, target 85%+ accuracy",
+                            },
+                          ].map((phase, index) => (
+                            <Card key={index} className="p-4">
+                              <h4 className="font-semibold text-primary mb-2">{phase.month}</h4>
+                              <div className="space-y-2">
+                                <div>
+                                  <h5 className="font-medium">Focus Areas:</h5>
+                                  <ul className="list-disc list-inside text-sm text-muted-foreground">
+                                    {phase.topics.map((topic, i) => (
+                                      <li key={i}>{topic}</li>
+                                    ))}
+                                  </ul>
+                                </div>
+                                <div>
+                                  <h5 className="font-medium">Target:</h5>
+                                  <p className="text-sm text-muted-foreground">{phase.target}</p>
+                                </div>
+                              </div>
+                            </Card>
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="books" className="mt-0">
+                      <div className="grid gap-4 md:grid-cols-3">
+                        {[
+                          {
+                            subject: "Physics",
+                            books: [
+                              "H.C. Verma - Concepts of Physics",
+                              "D.C. Pandey - Understanding Physics",
+                              "NCERT Physics Class 11 & 12",
+                            ],
+                          },
+                          {
+                            subject: "Chemistry",
+                            books: [
+                              "NCERT Chemistry Class 11 & 12",
+                              "O.P. Tandon - Physical Chemistry",
+                              "M.S. Chauhan - Organic Chemistry",
+                            ],
+                          },
+                          {
+                            subject: "Mathematics",
+                            books: [
+                              "NCERT Mathematics Class 11 & 12",
+                              "R.D. Sharma",
+                              "S.L. Loney - Coordinate Geometry",
+                            ],
+                          },
+                        ].map((subject, index) => (
+                          <Card key={index} className="p-4">
+                            <h4 className="font-semibold text-primary mb-3">{subject.subject}</h4>
+                            <ul className="space-y-2">
+                              {subject.books.map((book, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                                  <span className="text-sm">{book}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </Card>
+                        ))}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="practice" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Practice Tests & Mock Exams</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <Card className="p-4">
+                      <h3 className="font-semibold mb-3">Free Mock Tests</h3>
+                      <div className="space-y-3">
+                        {[
+                          { name: "JEE Main Mock Test 1", questions: 90, duration: "3 hours", attempted: false },
+                          {
+                            name: "JEE Main Mock Test 2",
+                            questions: 90,
+                            duration: "3 hours",
+                            attempted: true,
+                            score: "245/360",
+                          },
+                          { name: "Physics Chapter Test", questions: 30, duration: "1 hour", attempted: false },
+                        ].map((test, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                            <div>
+                              <h4 className="font-medium">{test.name}</h4>
+                              <p className="text-sm text-muted-foreground">
+                                {test.questions} Questions • {test.duration}
+                              </p>
+                              {test.attempted && test.score && (
+                                <p className="text-sm text-green-600">Score: {test.score}</p>
+                              )}
+                            </div>
+                            <Button variant={test.attempted ? "outline" : "default"} size="sm">
+                              {test.attempted ? "Retake" : "Start Test"}
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+
+                    <Card className="p-4">
+                      <h3 className="font-semibold mb-3">Subject-wise Practice</h3>
+                      <div className="space-y-3">
+                        {[
+                          { subject: "Physics", completed: 65, total: 100 },
+                          { subject: "Chemistry", completed: 45, total: 80 },
+                          { subject: "Mathematics", completed: 30, total: 90 },
+                        ].map((subject, index) => (
+                          <div key={index} className="space-y-2">
+                            <div className="flex justify-between">
+                              <span className="font-medium">{subject.subject}</span>
+                              <span className="text-sm text-muted-foreground">
+                                {subject.completed}/{subject.total} questions
+                              </span>
+                            </div>
+                            <Progress value={(subject.completed / subject.total) * 100} className="h-2" />
+                          </div>
+                        ))}
+                      </div>
+                      <Button className="w-full mt-4">Continue Practice</Button>
+                    </Card>
                   </div>
                 </CardContent>
               </Card>

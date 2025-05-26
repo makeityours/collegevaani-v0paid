@@ -14,9 +14,7 @@ import {
   FileText,
   GraduationCap,
   Info,
-  MapPin,
   CheckCircle,
-  ArrowRight,
   Bookmark,
   Star,
 } from "lucide-react"
@@ -293,6 +291,7 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
               <TabsTrigger value="syllabus">Syllabus</TabsTrigger>
               <TabsTrigger value="career">Career Prospects</TabsTrigger>
               <TabsTrigger value="colleges">Top Colleges</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="faqs">FAQs</TabsTrigger>
             </TabsList>
 
@@ -700,57 +699,87 @@ export default function CourseDetailPage({ params }: { params: { slug: string } 
               </Card>
             </TabsContent>
 
-            <TabsContent value="colleges" className="mt-6">
+            <TabsContent value="reviews" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Top Colleges Offering {course.title}</CardTitle>
+                  <CardTitle>Student Reviews & Ratings</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {course.topColleges.map((college, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-4 p-4 rounded-lg border hover:shadow-md transition-all duration-300"
-                      >
-                        <div className="h-16 w-16 relative rounded-md overflow-hidden">
-                          <Image
-                            src={college.image || "/placeholder.svg"}
-                            alt={college.name}
-                            fill
-                            className="object-cover"
-                          />
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-1">
+                      <div className="text-center p-6 bg-muted/50 rounded-lg">
+                        <div className="text-4xl font-bold text-primary">4.2</div>
+                        <div className="flex justify-center my-2">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`h-5 w-5 ${star <= 4 ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                            />
+                          ))}
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{college.name}</h3>
-                          <div className="flex items-center text-sm text-muted-foreground mt-1">
-                            <MapPin className="h-3 w-3 mr-1" />
-                            <span>{college.location}</span>
+                        <p className="text-sm text-muted-foreground">Based on 1,247 reviews</p>
+                      </div>
+                      <div className="mt-6 space-y-3">
+                        {[
+                          { rating: 5, percentage: 45 },
+                          { rating: 4, percentage: 30 },
+                          { rating: 3, percentage: 15 },
+                          { rating: 2, percentage: 7 },
+                          { rating: 1, percentage: 3 },
+                        ].map((item) => (
+                          <div key={item.rating} className="flex items-center gap-2">
+                            <span className="text-sm w-4">{item.rating}</span>
+                            <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                            <Progress value={item.percentage} className="flex-1 h-2" />
+                            <span className="text-sm text-muted-foreground w-8">{item.percentage}%</span>
                           </div>
-                          <div className="flex items-center gap-4 mt-1">
-                            <Badge variant="outline" className="text-xs">
-                              Fees: {college.fees}
-                            </Badge>
-                            <div className="flex items-center">
-                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1" />
-                              <span className="text-xs font-medium">NIRF Rank: #{college.ranking}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="lg:col-span-2 space-y-4">
+                      {[
+                        {
+                          name: "Rahul Sharma",
+                          rating: 5,
+                          date: "2 months ago",
+                          review:
+                            "Excellent curriculum and faculty. The practical sessions really helped me understand complex concepts. Highly recommend this course for aspiring engineers.",
+                          course: "Computer Science Engineering",
+                        },
+                        {
+                          name: "Priya Patel",
+                          rating: 4,
+                          date: "3 months ago",
+                          review:
+                            "Good course structure with industry-relevant content. Placement support was excellent. Only wish there were more hands-on projects.",
+                          course: "Information Technology",
+                        },
+                      ].map((review, index) => (
+                        <Card key={index} className="p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h4 className="font-semibold">{review.name}</h4>
+                              <p className="text-sm text-muted-foreground">{review.course}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className="flex">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <Star
+                                    key={star}
+                                    className={`h-4 w-4 ${star <= review.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                                  />
+                                ))}
+                              </div>
+                              <p className="text-xs text-muted-foreground">{review.date}</p>
                             </div>
                           </div>
-                        </div>
-                        <Button variant="outline" size="sm" className="shrink-0 group" asChild>
-                          <Link href={`/colleges/${college.name.toLowerCase().replace(/\s+/g, "-")}`}>
-                            View College
-                            <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                          </Link>
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-6 flex justify-center">
-                    <Button className="group">
-                      View All Colleges
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
+                          <p className="text-sm">{review.review}</p>
+                        </Card>
+                      ))}
+                      <Button variant="outline" className="w-full">
+                        Load More Reviews
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
