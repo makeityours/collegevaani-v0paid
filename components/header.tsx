@@ -17,23 +17,7 @@ import {
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import {
-  Search,
-  Menu,
-  ChevronDown,
-  User,
-  BookOpen,
-  GraduationCap,
-  FileText,
-  Globe,
-  Home,
-  Sun,
-  Moon,
-  School,
-  BookOpenCheck,
-  Laptop,
-  X,
-} from "lucide-react"
+import { Search, Menu, ChevronDown, User, BookOpen, GraduationCap, FileText, Globe, Home, Sun, Moon, School, BookOpenCheck, Laptop, X } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -60,7 +44,7 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300 bg-white dark:bg-gray-950",
+        "sticky top-0 z-50 w-full transition-all duration-300 bg-background",
         isScrolled ? "shadow-md border-b border-gray-100 dark:border-gray-800" : "",
       )}
     >
@@ -104,7 +88,7 @@ export default function Header() {
                           href="/colleges/engineering"
                         >
                           <div className="text-sm font-medium leading-none">Engineering Colleges</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Top IITs, NITs and private engineering institutions
                           </p>
                         </a>
@@ -117,7 +101,7 @@ export default function Header() {
                           href="/colleges/medical"
                         >
                           <div className="text-sm font-medium leading-none">Medical Colleges</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             AIIMS, top government and private medical colleges
                           </p>
                         </a>
@@ -130,7 +114,7 @@ export default function Header() {
                           href="/colleges/compare"
                         >
                           <div className="text-sm font-medium leading-none">Compare Colleges</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Side-by-side comparison of your shortlisted colleges
                           </p>
                         </a>
@@ -143,7 +127,7 @@ export default function Header() {
                           href="/colleges/rankings"
                         >
                           <div className="text-sm font-medium leading-none">College Rankings</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             NIRF and other popular college rankings
                           </p>
                         </a>
@@ -177,7 +161,7 @@ export default function Header() {
                           href="/courses/engineering"
                         >
                           <div className="text-sm font-medium leading-none">Engineering</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             B.Tech, M.Tech and specialized engineering programs
                           </p>
                         </a>
@@ -190,7 +174,7 @@ export default function Header() {
                           href="/courses/medical"
                         >
                           <div className="text-sm font-medium leading-none">Medical</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             MBBS, MD, BDS and other medical courses
                           </p>
                         </a>
@@ -203,7 +187,7 @@ export default function Header() {
                           href="/courses/management"
                         >
                           <div className="text-sm font-medium leading-none">Management</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             MBA, BBA, and executive management programs
                           </p>
                         </a>
@@ -219,7 +203,7 @@ export default function Header() {
                             <span className="text-sm font-medium leading-none">Online Degree Courses</span>
                             <Badge className="bg-gradient-to-r from-blue-600 to-indigo-600">New</Badge>
                           </div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Flexible online degree programs from top universities
                           </p>
                         </a>
@@ -256,7 +240,7 @@ export default function Header() {
                             <span className="text-sm font-medium leading-none">JEE Main</span>
                             <Badge className="bg-red-500">Live</Badge>
                           </div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Joint Entrance Examination for engineering admissions
                           </p>
                         </a>
@@ -272,7 +256,7 @@ export default function Header() {
                             <span className="text-sm font-medium leading-none">NEET</span>
                             <Badge className="bg-red-500">Live</Badge>
                           </div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             National Eligibility cum Entrance Test for medical
                           </p>
                         </a>
@@ -285,7 +269,7 @@ export default function Header() {
                           href="/exams/cat"
                         >
                           <div className="text-sm font-medium leading-none">CAT</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Common Admission Test for MBA admissions
                           </p>
                         </a>
@@ -298,7 +282,7 @@ export default function Header() {
                           href="/resources/college-predictor"
                         >
                           <div className="text-sm font-medium leading-none">College Predictor</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Predict colleges based on your exam scores
                           </p>
                         </a>
@@ -332,7 +316,7 @@ export default function Header() {
                           href="/resources/college-predictor"
                         >
                           <div className="text-sm font-medium leading-none">College Predictor</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Predict colleges based on your exam scores
                           </p>
                         </a>
@@ -345,7 +329,7 @@ export default function Header() {
                           href="/resources/study-material"
                         >
                           <div className="text-sm font-medium leading-none">Study Material</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Free study resources for various exams
                           </p>
                         </a>
@@ -358,7 +342,7 @@ export default function Header() {
                           href="/resources/scholarships"
                         >
                           <div className="text-sm font-medium leading-none">Scholarships</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Find scholarships to fund your education
                           </p>
                         </a>
@@ -371,7 +355,7 @@ export default function Header() {
                           href="/resources/career-guidance"
                         >
                           <div className="text-sm font-medium leading-none">Career Guidance</div>
-                          <p className="text-sm leading-snug text-gray-500 line-clamp-2">
+                          <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
                             Expert advice on choosing the right career path
                           </p>
                         </a>
@@ -391,20 +375,20 @@ export default function Header() {
                 isSearchOpen ? "opacity-100" : "opacity-0",
               )}
             >
-              <Search className="w-4 h-4 text-gray-500" />
+              <Search className="w-4 h-4 text-muted-foreground" />
             </div>
             <Input
               type="search"
               placeholder="Search colleges, courses, exams..."
               className={cn(
-                "pl-10 transition-all duration-300 border-gray-200 focus-visible:ring-blue-500",
+                "pl-10 transition-all duration-300 border-input focus-visible:ring-blue-500",
                 isSearchOpen ? "w-full opacity-100" : "w-0 opacity-0 pointer-events-none",
               )}
             />
             <Button
               variant="ghost"
               size="icon"
-              className={cn("absolute right-0 top-0", isSearchOpen ? "text-gray-500" : "text-gray-700")}
+              className={cn("absolute right-0 top-0", isSearchOpen ? "text-muted-foreground" : "text-foreground")}
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
               {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
@@ -470,9 +454,9 @@ export default function Header() {
                   <div className="space-y-1">
                     <Link
                       href="/"
-                      className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-muted"
                     >
-                      <Home className="w-5 h-5 text-gray-500" />
+                      <Home className="w-5 h-5 text-muted-foreground" />
                       <span>Home</span>
                     </Link>
                     <Link
@@ -484,47 +468,47 @@ export default function Header() {
                       <Badge className="ml-auto bg-blue-600">New</Badge>
                     </Link>
                   </div>
-                  <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
-                    <h3 className="mb-2 text-sm font-medium text-gray-500">Explore</h3>
+                  <div className="pt-2 border-t border-border">
+                    <h3 className="mb-2 text-sm font-medium text-muted-foreground">Explore</h3>
                     <div className="space-y-1">
                       <Link
                         href="/colleges"
-                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-muted"
                       >
-                        <School className="w-5 h-5 text-gray-500" />
+                        <School className="w-5 h-5 text-muted-foreground" />
                         <span>Colleges</span>
                       </Link>
                       <Link
                         href="/courses"
-                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-muted"
                       >
-                        <BookOpenCheck className="w-5 h-5 text-gray-500" />
+                        <BookOpenCheck className="w-5 h-5 text-muted-foreground" />
                         <span>Courses</span>
                       </Link>
                       <Link
                         href="/exams"
-                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-muted"
                       >
-                        <FileText className="w-5 h-5 text-gray-500" />
+                        <FileText className="w-5 h-5 text-muted-foreground" />
                         <span>Exams</span>
                       </Link>
                       <Link
                         href="/resources"
-                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="flex items-center gap-2 p-2 transition-colors rounded-md hover:bg-muted"
                       >
-                        <Globe className="w-5 h-5 text-gray-500" />
+                        <Globe className="w-5 h-5 text-muted-foreground" />
                         <span>Resources</span>
                       </Link>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
-                    <h3 className="mb-2 text-sm font-medium text-gray-500">Settings</h3>
+                  <div className="pt-2 border-t border-border">
+                    <h3 className="mb-2 text-sm font-medium text-muted-foreground">Settings</h3>
                     <div className="flex items-center justify-between p-2">
                       <div className="flex items-center gap-2">
                         {theme === "light" ? (
-                          <Sun className="w-5 h-5 text-gray-500" />
+                          <Sun className="w-5 h-5 text-muted-foreground" />
                         ) : (
-                          <Moon className="w-5 h-5 text-gray-500" />
+                          <Moon className="w-5 h-5 text-muted-foreground" />
                         )}
                         <span>Dark Mode</span>
                       </div>
@@ -538,9 +522,9 @@ export default function Header() {
                   <div className="space-y-1">
                     <Link
                       href="/auth/login"
-                      className="flex items-center w-full gap-2 p-2 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="flex items-center w-full gap-2 p-2 transition-colors rounded-md hover:bg-muted"
                     >
-                      <User className="w-5 h-5 text-gray-500" />
+                      <User className="w-5 h-5 text-muted-foreground" />
                       <span>Login</span>
                     </Link>
                     <Link href="/auth/register">
