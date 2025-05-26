@@ -1,10 +1,9 @@
 # CollegeVaani Production Deployment Checklist
 
 ## ✅ Environment Variables (Completed)
-- [x] NEXT_PUBLIC_RAZORPAY_KEY_ID
-- [x] RAZORPAY_KEY_ID  
-- [x] RAZORPAY_KEY_SECRET
-- [x] RAZORPAY_WEBHOOK_SECRET
+- [x] NEXT_PUBLIC_RAZORPAY_KEY_ID (Public key for frontend)
+- [x] RAZORPAY_KEY_SECRET (Private secret for backend)
+- [x] RAZORPAY_WEBHOOK_SECRET (Webhook verification)
 - [x] HUBSPOT_API_KEY
 - [x] ADMIN_EMAIL
 - [x] GA_MEASUREMENT_ID
@@ -58,3 +57,9 @@
 - Error rates
 - User engagement metrics
 - Revenue tracking
+
+## 🔒 Security Notes
+- Only public keys are exposed to client-side
+- All sensitive operations are server-side only
+- Payment processing uses secure server endpoints
+- Environment variables follow security best practices

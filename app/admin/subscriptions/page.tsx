@@ -26,7 +26,7 @@ import {
 
 export default function SubscriptionsPage() {
   const [activeTab, setActiveTab] = useState("overview")
-  
+
   const subscriptionStats = {
     totalSubscribers: 2847,
     activeSubscriptions: 2456,
@@ -123,15 +123,15 @@ export default function SubscriptionsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Subscription Management</h1>
+          <h1 className="text-3xl font-bold text-indigo-900">Subscription Management</h1>
           <p className="text-muted-foreground">Monitor and manage all user subscriptions</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
+          <Button variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
             <Download className="h-4 w-4 mr-2" />
             Export Data
           </Button>
-          <Button>
+          <Button className="bg-indigo-600 hover:bg-indigo-700">
             <RefreshCw className="h-4 w-4 mr-2" />
             Sync Payments
           </Button>
@@ -140,72 +140,78 @@ export default function SubscriptionsPage() {
 
       {/* Subscription Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-        <Card>
+        <Card className="border-indigo-100">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Subscribers</p>
-                <p className="text-2xl font-bold">{subscriptionStats.totalSubscribers.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-indigo-900">
+                  {subscriptionStats.totalSubscribers.toLocaleString()}
+                </p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-indigo-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-indigo-100">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold">{subscriptionStats.activeSubscriptions.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-indigo-900">
+                  {subscriptionStats.activeSubscriptions.toLocaleString()}
+                </p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-indigo-100">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Monthly Revenue</p>
-                <p className="text-2xl font-bold">₹{(subscriptionStats.monthlyRevenue / 100000).toFixed(1)}L</p>
+                <p className="text-2xl font-bold text-indigo-900">
+                  ₹{(subscriptionStats.monthlyRevenue / 100000).toFixed(1)}L
+                </p>
               </div>
               <DollarSign className="h-8 w-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-indigo-100">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Churn Rate</p>
-                <p className="text-2xl font-bold">{subscriptionStats.churnRate}%</p>
+                <p className="text-2xl font-bold text-indigo-900">{subscriptionStats.churnRate}%</p>
               </div>
               <TrendingUp className="h-8 w-8 text-orange-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-indigo-100">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Avg Lifetime</p>
-                <p className="text-2xl font-bold">{subscriptionStats.averageLifetime}m</p>
+                <p className="text-2xl font-bold text-indigo-900">{subscriptionStats.averageLifetime}m</p>
               </div>
               <Calendar className="h-8 w-8 text-purple-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-indigo-100">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conversion</p>
-                <p className="text-2xl font-bold">{subscriptionStats.conversionRate}%</p>
+                <p className="text-2xl font-bold text-indigo-900">{subscriptionStats.conversionRate}%</p>
               </div>
               <TrendingUp className="h-8 w-8 text-indigo-500" />
             </div>
@@ -214,31 +220,42 @@ export default function SubscriptionsPage() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-          <TabsTrigger value="plans">Plans</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 bg-indigo-50">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+            Overview
+          </TabsTrigger>
+          <TabsTrigger
+            value="subscriptions"
+            className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
+          >
+            Subscriptions
+          </TabsTrigger>
+          <TabsTrigger value="plans" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+            Plans
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+            Analytics
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <Card className="border-indigo-100">
               <CardHeader>
-                <CardTitle>Subscription Growth</CardTitle>
+                <CardTitle className="text-indigo-900">Subscription Growth</CardTitle>
                 <CardDescription>Monthly subscription growth trend</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px] flex items-center justify-center bg-muted/30 rounded-md">
-                  <TrendingUp className="h-8 w-8 text-muted-foreground" />
-                  <span className="ml-2 text-muted-foreground">Growth chart</span>
+                <div className="h-[300px] flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 rounded-md">
+                  <TrendingUp className="h-8 w-8 text-indigo-400" />
+                  <span className="ml-2 text-indigo-600">Growth chart</span>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-indigo-100">
               <CardHeader>
-                <CardTitle>Revenue Breakdown</CardTitle>
+                <CardTitle className="text-indigo-900">Revenue Breakdown</CardTitle>
                 <CardDescription>Revenue by subscription plan</CardDescription>
               </CardHeader>
               <CardContent>
@@ -246,11 +263,11 @@ export default function SubscriptionsPage() {
                   {plans.map((plan) => (
                     <div key={plan.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="h-3 w-3 rounded-full bg-primary"></div>
-                        <span className="font-medium">{plan.name}</span>
+                        <div className="h-3 w-3 rounded-full bg-indigo-500"></div>
+                        <span className="font-medium text-indigo-900">{plan.name}</span>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium">₹{(plan.revenue / 1000).toFixed(0)}K</p>
+                        <p className="font-medium text-indigo-900">₹{(plan.revenue / 1000).toFixed(0)}K</p>
                         <p className="text-sm text-muted-foreground">{plan.subscribers} users</p>
                       </div>
                     </div>
@@ -260,9 +277,9 @@ export default function SubscriptionsPage() {
             </Card>
           </div>
 
-          <Card>
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>Recent Subscription Activity</CardTitle>
+              <CardTitle className="text-indigo-900">Recent Subscription Activity</CardTitle>
               <CardDescription>Latest subscription changes and updates</CardDescription>
             </CardHeader>
             <CardContent>
@@ -273,14 +290,19 @@ export default function SubscriptionsPage() {
                   { action: "Subscription cancelled", user: "Amit Singh", plan: "Premium", time: "3 hours ago" },
                   { action: "Payment failed", user: "Neha Gupta", plan: "Pro", time: "5 hours ago" },
                 ].map((activity, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border border-indigo-100 rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                        <CreditCard className="h-4 w-4 text-primary" />
+                      <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <CreditCard className="h-4 w-4 text-indigo-600" />
                       </div>
                       <div>
-                        <p className="font-medium">{activity.action}</p>
-                        <p className="text-sm text-muted-foreground">{activity.user} • {activity.plan}</p>
+                        <p className="font-medium text-indigo-900">{activity.action}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {activity.user} • {activity.plan}
+                        </p>
                       </div>
                     </div>
                     <span className="text-sm text-muted-foreground">{activity.time}</span>
@@ -293,9 +315,12 @@ export default function SubscriptionsPage() {
 
         <TabsContent value="subscriptions" className="space-y-4">
           <div className="flex items-center gap-4 mb-4">
-            <Input placeholder="Search subscriptions..." className="max-w-sm" />
+            <Input
+              placeholder="Search subscriptions..."
+              className="max-w-sm border-indigo-200 focus:border-indigo-500"
+            />
             <Select>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border-indigo-200">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
               <SelectContent>
@@ -307,7 +332,7 @@ export default function SubscriptionsPage() {
               </SelectContent>
             </Select>
             <Select>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border-indigo-200">
                 <SelectValue placeholder="Filter by plan" />
               </SelectTrigger>
               <SelectContent>
@@ -319,76 +344,93 @@ export default function SubscriptionsPage() {
             </Select>
           </div>
 
-          <Card>
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>All Subscriptions</CardTitle>
+              <CardTitle className="text-indigo-900">All Subscriptions</CardTitle>
               <CardDescription>Manage individual user subscriptions</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {subscriptions.map((subscription) => (
-                  <div key={subscription.id} className="border rounded-lg p-4">
+                  <div key={subscription.id} className="border border-indigo-100 rounded-lg p-4">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Users className="h-5 w-5 text-primary" />
+                        <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                          <Users className="h-5 w-5 text-indigo-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">{subscription.user}</h3>
+                          <h3 className="font-medium text-indigo-900">{subscription.user}</h3>
                           <p className="text-sm text-muted-foreground">{subscription.email}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge 
+                        <Badge
                           variant={subscription.status === "Active" ? "default" : "secondary"}
+                          className={subscription.status === "Active" ? "bg-indigo-600" : ""}
                         >
                           {subscription.status}
                         </Badge>
-                        <Badge variant="outline">{subscription.plan}</Badge>
+                        <Badge variant="outline" className="border-indigo-200 text-indigo-700">
+                          {subscription.plan}
+                        </Badge>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                       <div>
                         <p className="text-sm text-muted-foreground">Start Date</p>
-                        <p className="font-medium">{new Date(subscription.startDate).toLocaleDateString()}</p>
+                        <p className="font-medium text-indigo-900">
+                          {new Date(subscription.startDate).toLocaleDateString()}
+                        </p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Next Billing</p>
-                        <p className="font-medium">{new Date(subscription.nextBilling).toLocaleDateString()}</p>
+                        <p className="font-medium text-indigo-900">
+                          {new Date(subscription.nextBilling).toLocaleDateString()}
+                        </p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Amount</p>
-                        <p className="font-medium">₹{subscription.amount}</p>
+                        <p className="font-medium text-indigo-900">₹{subscription.amount}</p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Payment Method</p>
-                        <p className="font-medium">{subscription.paymentMethod}</p>
+                        <p className="font-medium text-indigo-900">{subscription.paymentMethod}</p>
                       </div>
                     </div>
 
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                      >
                         <Eye className="h-4 w-4 mr-2" />
                         View Details
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                      >
                         <Edit className="h-4 w-4 mr-2" />
                         Edit
                       </Button>
                       {subscription.status === "Active" && (
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
+                          className="border-red-200 text-red-700 hover:bg-red-50"
                           onClick={() => handleCancelSubscription(subscription.id)}
                         >
                           <XCircle className="h-4 w-4 mr-2" />
                           Cancel
                         </Button>
                       )}
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         size="sm"
+                        className="border-orange-200 text-orange-700 hover:bg-orange-50"
                         onClick={() => handleRefundSubscription(subscription.id)}
                       >
                         <RefreshCw className="h-4 w-4 mr-2" />
@@ -403,21 +445,21 @@ export default function SubscriptionsPage() {
         </TabsContent>
 
         <TabsContent value="plans" className="space-y-4">
-          <Card>
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>Subscription Plans</CardTitle>
+              <CardTitle className="text-indigo-900">Subscription Plans</CardTitle>
               <CardDescription>Manage pricing plans and features</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {plans.map((plan) => (
-                  <Card key={plan.id} className="relative">
+                  <Card key={plan.id} className="relative border-indigo-100">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle>{plan.name}</CardTitle>
+                        <CardTitle className="text-indigo-900">{plan.name}</CardTitle>
                         <Switch checked={plan.active} />
                       </div>
-                      <div className="text-3xl font-bold">₹{plan.price}</div>
+                      <div className="text-3xl font-bold text-indigo-900">₹{plan.price}</div>
                       <CardDescription>per {plan.interval}</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -433,19 +475,22 @@ export default function SubscriptionsPage() {
                             ))}
                           </ul>
                         </div>
-                        
+
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
                             <p className="text-muted-foreground">Subscribers</p>
-                            <p className="font-medium">{plan.subscribers}</p>
+                            <p className="font-medium text-indigo-900">{plan.subscribers}</p>
                           </div>
                           <div>
                             <p className="text-muted-foreground">Revenue</p>
-                            <p className="font-medium">₹{(plan.revenue / 1000).toFixed(0)}K</p>
+                            <p className="font-medium text-indigo-900">₹{(plan.revenue / 1000).toFixed(0)}K</p>
                           </div>
                         </div>
 
-                        <Button variant="outline" className="w-full">
+                        <Button
+                          variant="outline"
+                          className="w-full border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+                        >
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Plan
                         </Button>
@@ -457,25 +502,34 @@ export default function SubscriptionsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-indigo-100">
             <CardHeader>
-              <CardTitle>Create New Plan</CardTitle>
+              <CardTitle className="text-indigo-900">Create New Plan</CardTitle>
               <CardDescription>Add a new subscription plan</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="plan-name">Plan Name</Label>
-                  <Input id="plan-name" placeholder="e.g., Premium Plus" />
+                  <Input
+                    id="plan-name"
+                    placeholder="e.g., Premium Plus"
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="plan-price">Price</Label>
-                  <Input id="plan-price" placeholder="e.g., 1499" type="number" />
+                  <Input
+                    id="plan-price"
+                    placeholder="e.g., 1499"
+                    type="number"
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="plan-interval">Billing Interval</Label>
                   <Select>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-indigo-200">
                       <SelectValue placeholder="Select interval" />
                     </SelectTrigger>
                     <SelectContent>
@@ -487,47 +541,52 @@ export default function SubscriptionsPage() {
                 </div>
                 <div>
                   <Label htmlFor="plan-trial">Trial Period (days)</Label>
-                  <Input id="plan-trial" placeholder="e.g., 7" type="number" />
+                  <Input
+                    id="plan-trial"
+                    placeholder="e.g., 7"
+                    type="number"
+                    className="border-indigo-200 focus:border-indigo-500"
+                  />
                 </div>
               </div>
               <div className="mt-4">
                 <Label htmlFor="plan-features">Features (one per line)</Label>
-                <textarea 
+                <textarea
                   id="plan-features"
-                  className="w-full mt-1 p-2 border rounded-md"
+                  className="w-full mt-1 p-2 border border-indigo-200 rounded-md focus:border-indigo-500"
                   rows={4}
                   placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
                 />
               </div>
-              <Button className="mt-4">Create Plan</Button>
+              <Button className="mt-4 bg-indigo-600 hover:bg-indigo-700">Create Plan</Button>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
+            <Card className="border-indigo-100">
               <CardHeader>
-                <CardTitle>Subscription Metrics</CardTitle>
+                <CardTitle className="text-indigo-900">Subscription Metrics</CardTitle>
                 <CardDescription>Key performance indicators</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span>Monthly Recurring Revenue (MRR)</span>
-                    <span className="font-medium">₹12.45L</span>
+                    <span className="font-medium text-indigo-900">₹12.45L</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Annual Recurring Revenue (ARR)</span>
-                    <span className="font-medium">₹1.49Cr</span>
+                    <span className="font-medium text-indigo-900">₹1.49Cr</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Customer Lifetime Value (CLV)</span>
-                    <span className="font-medium">₹4,250</span>
+                    <span className="font-medium text-indigo-900">₹4,250</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Average Revenue Per User (ARPU)</span>
-                    <span className="font-medium">₹437</span>
+                    <span className="font-medium text-indigo-900">₹437</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Churn Rate</span>
@@ -541,11 +600,21 @@ export default function SubscriptionsPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-indigo-100">
               <CardHeader>
-                <CardTitle>Cohort Analysis</CardTitle>
+                <CardTitle className="text-indigo-900">Cohort Analysis</CardTitle>
                 <CardDescription>User retention by signup month</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px] flex items-center justify-center bg-muted/30 rounded-md">
-                  <TrendingUp className="\
+                <div className="h-[300px] flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 rounded-md">
+                  <TrendingUp className="h-8 w-8 text-indigo-400" />
+                  <span className="ml-2 text-indigo-600">Cohort chart</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
