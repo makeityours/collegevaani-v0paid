@@ -90,3 +90,16 @@ export const rateLimiters = {
     message: "Admin rate limit exceeded",
   }),
 }
+
+// Export the main rate limiting function
+export const rateLimit = (config: RateLimitConfig) => {
+  const limiter = new RateLimiter(config)
+  return limiter.middleware()
+}
+
+// Export default rate limiter for general use
+export const defaultRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 100,
+  message: "Too many requests, please try again later",
+})

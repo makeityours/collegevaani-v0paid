@@ -1,0 +1,102 @@
+{
+  "name": "CollegeVaani - Find Your Perfect College",
+  "short_name": "CollegeVaani",
+  "description": "Discover, compare, and apply to the best colleges in India. Get expert guidance on admissions, courses, and career paths.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Find Colleges",
+      "short_name": "Colleges",
+      "description": "Search and compare colleges",
+      "url": "/colleges",
+      "icons": [{ "src": "/icons/shortcut-colleges.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Browse Courses",
+      "short_name": "Courses",
+      "description": "Explore available courses",
+      "url": "/courses",
+      "icons": [{ "src": "/icons/shortcut-courses.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Exam Calendar",
+      "short_name": "Exams",
+      "description": "View upcoming exams",
+      "url": "/exams",
+      "icons": [{ "src": "/icons/shortcut-exams.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "CollegeVaani Homepage"
+    },
+    {
+      "src": "/screenshots/mobile-colleges.png",
+      "sizes": "375x667",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "College Search"
+    }
+  ]
+}
