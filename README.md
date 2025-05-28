@@ -1,30 +1,185 @@
-# collegevaani5
+# CollegeVaani - College Application Platform
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+![CollegeVaani Logo](public/logo.png)
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/sagars-projects-7fddf57d/v0-collegevaani5)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/s8iczibNpUj)
+CollegeVaani is a comprehensive platform for students to discover colleges, apply for courses, and access educational resources. The platform also provides lead generation for colleges and monetization features.
 
-## Overview
+## Tech Stack
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, PostgreSQL, Redis
+- **Authentication**: JWT-based auth with refresh tokens
+- **Deployment**: Docker, Nginx, PM2
+- **Monitoring**: Sentry, structured logging
+- **Payment Processing**: Razorpay integration
 
-## Deployment
+## Development Setup
 
-Your project is live at:
+### Prerequisites
 
-**[https://vercel.com/sagars-projects-7fddf57d/v0-collegevaani5](https://vercel.com/sagars-projects-7fddf57d/v0-collegevaani5)**
+- Node.js 18+ and npm
+- PostgreSQL 14+
+- Redis (optional for development)
+- Git
 
-## Build your app
+### Installation
 
-Continue building your app on:
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/collegevaani.git
+   cd collegevaani
+   ```
 
-**[https://v0.dev/chat/projects/s8iczibNpUj](https://v0.dev/chat/projects/s8iczibNpUj)**
+2. Install dependencies
+   ```bash
+   npm install
+   ```
 
-## How It Works
+3. Create a `.env.local` file with required environment variables (see `.env.example`)
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+4. Setup the database
+   ```bash
+   npm run db:setup
+   ```
+
+5. Run the development server
+   ```bash
+   npm run dev
+   ```
+
+6. Access the application at http://localhost:3000
+
+### Running Tests
+
+```bash
+npm run test
+```
+
+For watch mode during development:
+```bash
+npm run test:watch
+```
+
+## Production Deployment
+
+### Option 1: Deployment on Ubuntu VPS
+
+1. Provision an Ubuntu 22.04 server with at least 4GB RAM
+2. SSH into your server and run our setup script
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/yourusername/collegevaani/main/scripts/setup-vps.sh | sudo bash
+   ```
+
+3. Clone the repository and set up environment variables
+   ```bash
+   git clone https://github.com/yourusername/collegevaani.git /var/www/collegevaani
+   cd /var/www/collegevaani
+   cp .env.example .env
+   # Edit .env with your production values
+   ```
+
+4. Install dependencies and build the application
+   ```bash
+   npm ci
+   npm run build
+   ```
+
+5. Set up SSL certificates
+   ```bash
+   sudo bash scripts/setup-ssl.sh
+   ```
+
+6. Start the application with PM2
+   ```bash
+   pm2 start ecosystem.config.js --env production
+   pm2 save && pm2 startup
+   ```
+
+7. Set up database backups
+   ```bash
+   chmod +x scripts/backup-database.sh
+   ```
+
+### Option 2: Docker Deployment
+
+1. Clone the repository on your server
+   ```bash
+   git clone https://github.com/yourusername/collegevaani.git
+   cd collegevaani
+   ```
+
+2. Create a `.env` file with your production environment variables
+
+3. Build and start the Docker containers
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Set up SSL certificates (if not using the built-in certbot container)
+   ```bash
+   sudo bash scripts/setup-ssl.sh
+   ```
+
+## Project Structure
+
+```
+├── app/                  # Next.js App Router directory
+│   ├── api/              # API routes
+│   ├── auth/             # Authentication pages
+│   ├── dashboard/        # Dashboard pages
+│   └── ...               # Other page routes
+├── components/           # React components
+│   ├── ui/               # UI components
+│   ├── forms/            # Form components
+│   └── ...               # Other components
+├── lib/                  # Utility functions and modules
+│   ├── auth/             # Authentication utilities
+│   ├── database/         # Database utilities
+│   │   └── migrations/   # Database migrations
+│   ├── payments/         # Payment processing utilities
+│   └── ...               # Other utilities
+├── public/               # Static assets
+├── scripts/              # Deployment and setup scripts
+└── ...                   # Configuration files
+```
+
+## Environment Variables
+
+See `.env.example` for a list of required environment variables.
+
+## Database Migrations
+
+Run migrations:
+```bash
+npm run db:setup
+```
+
+Rollback the latest migration:
+```bash
+npm run db:rollback
+```
+
+Reset the database (development only):
+```bash
+npm run db:reset
+```
+
+## Monitoring and Maintenance
+
+- **Error tracking**: Access the Sentry dashboard to monitor errors
+- **Logs**: Check the logs in `/var/log/collegevaani/`
+- **Database backups**: Automated daily at 2 AM in `/var/backups/collegevaani/`
+
+## Security Features
+
+- SSL/TLS encryption
+- HTTP security headers
+- Rate limiting
+- Input validation
+- Token-based authentication
+- Secure password hashing
+- Database connection security
+
+## License
+
+Proprietary - All rights reserved

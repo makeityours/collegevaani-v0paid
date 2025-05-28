@@ -1,0 +1,8 @@
+# Run scheduled tasks every hour
+0 * * * * cd /app && node scripts/scheduled-tasks.js >> /var/log/cron.log 2>&1
+
+# Clean up old logs daily at 3 AM
+0 3 * * * find /var/log/ -name "*.log" -type f -mtime +7 -delete
+
+# Backup database every day at 2 AM
+0 2 * * * cd /app && node scripts/backup-database.js >> /var/log/backup.log 2>&1 

@@ -4,28 +4,86 @@ import type { NextRequest } from "next/server"
 import { config } from "@/lib/config/environment"
 import { AuthenticationError, AuthorizationError } from "@/lib/errors/error-handler"
 
-export interface JWTPayload {
+export interface TokenPayload {
   userId: string
   email: string
   role: string
+}
+
+export interface JWTAccessPayload extends TokenPayload {
+  type: "access"
+  iat: number
+  exp: number
+}
+
+export interface JWTRefreshPayload extends TokenPayload {
+  type: "refresh"
   iat: number
   exp: number
 }
 
 export class AuthService {
-  // Generate JWT token
-  static generateToken(payload: Omit<JWTPayload, "iat" | "exp">): string {
-    return jwt.sign(payload, config.auth.jwtSecret, {
-      expiresIn: config.auth.jwtExpiresIn,
-    })
+  // Generate access token
+  static generateAccessToken(payload: TokenPayload): string {
+    return jwt.sign(
+      { ...payload, type: "access" },
+      config.auth.jwtSecret,
+      { expiresIn: config.auth.jwtAccessExpiresIn }
+    )
   }
 
-  // Verify JWT token
-  static verifyToken(token: string): JWTPayload {
+  // Generate refresh token
+  static generateRefreshToken(payload: TokenPayload): string {
+    return jwt.sign(
+      { ...payload, type: "refresh" },
+      config.auth.jwtRefreshSecret,
+      { expiresIn: config.auth.jwtRefreshExpiresIn }
+    )
+  }
+
+  // Generate token pair
+  static generateTokenPair(payload: TokenPayload): { accessToken: string; refreshToken: string } {
+    return {
+      accessToken: this.generateAccessToken(payload),
+      refreshToken: this.generateRefreshToken(payload),
+    }
+  }
+
+  // Verify access token
+  static verifyAccessToken(token: string): JWTAccessPayload {
     try {
-      return jwt.verify(token, config.auth.jwtSecret) as JWTPayload
+      const payload = jwt.verify(token, config.auth.jwtSecret) as JWTAccessPayload
+      
+      // Validate token type
+      if (payload.type !== "access") {
+        throw new AuthenticationError("Invalid token type")
+      }
+      
+      return payload
     } catch (error) {
-      throw new AuthenticationError("Invalid or expired token")
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new AuthenticationError("Access token expired")
+      }
+      throw new AuthenticationError("Invalid access token")
+    }
+  }
+
+  // Verify refresh token
+  static verifyRefreshToken(token: string): JWTRefreshPayload {
+    try {
+      const payload = jwt.verify(token, config.auth.jwtRefreshSecret) as JWTRefreshPayload
+      
+      // Validate token type
+      if (payload.type !== "refresh") {
+        throw new AuthenticationError("Invalid token type")
+      }
+      
+      return payload
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new AuthenticationError("Refresh token expired")
+      }
+      throw new AuthenticationError("Invalid refresh token")
     }
   }
 
@@ -40,23 +98,50 @@ export class AuthService {
     return bcrypt.compare(password, hashedPassword)
   }
 
-  // Extract token from request
-  static extractTokenFromRequest(request: NextRequest): string | null {
+  // Extract access token from request
+  static extractAccessTokenFromRequest(request: NextRequest): string | null {
+    // Try to get token from Authorization header
     const authHeader = request.headers.get("authorization")
     if (authHeader && authHeader.startsWith("Bearer ")) {
       return authHeader.substring(7)
     }
+    
+    // Try to get token from cookie as fallback
+    const cookies = request.cookies
+    const tokenCookie = cookies.get("access_token")
+    if (tokenCookie) {
+      return tokenCookie.value
+    }
+    
     return null
   }
 
-  // Get user from request
-  static async getUserFromRequest(request: NextRequest): Promise<JWTPayload> {
-    const token = this.extractTokenFromRequest(request)
+  // Extract refresh token from request
+  static extractRefreshTokenFromRequest(request: NextRequest): string | null {
+    // Try to get token from Authorization header with refresh prefix
+    const authHeader = request.headers.get("authorization")
+    if (authHeader && authHeader.startsWith("Refresh ")) {
+      return authHeader.substring(8)
+    }
+    
+    // Try to get token from cookie as fallback
+    const cookies = request.cookies
+    const tokenCookie = cookies.get("refresh_token")
+    if (tokenCookie) {
+      return tokenCookie.value
+    }
+    
+    return null
+  }
+
+  // Get user from request using access token
+  static async getUserFromRequest(request: NextRequest): Promise<JWTAccessPayload> {
+    const token = this.extractAccessTokenFromRequest(request)
     if (!token) {
-      throw new AuthenticationError("No token provided")
+      throw new AuthenticationError("No access token provided")
     }
 
-    return this.verifyToken(token)
+    return this.verifyAccessToken(token)
   }
 
   // Check if user has required role
@@ -65,7 +150,7 @@ export class AuthService {
   }
 
   // Middleware for protected routes
-  static async requireAuth(request: NextRequest, requiredRoles?: string[]): Promise<JWTPayload> {
+  static async requireAuth(request: NextRequest, requiredRoles?: string[]): Promise<JWTAccessPayload> {
     const user = await this.getUserFromRequest(request)
 
     if (requiredRoles && !this.checkRole(user.role, requiredRoles)) {
